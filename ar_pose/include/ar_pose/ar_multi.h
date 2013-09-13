@@ -43,7 +43,7 @@
 #include <resource_retriever/retriever.h>
 
 #include <opencv/cv.h>
-#include <cv_bridge/CvBridge.h>
+#include <cv_bridge/cv_bridge.h>
 
 #include <ar_pose/ARMarkers.h>
 #include <ar_pose/ARMarker.h>
@@ -74,7 +74,6 @@ namespace ar_pose
       ros::Publisher arMarkerPub_;
 
       image_transport::ImageTransport it_;
-      sensor_msgs::CvBridge bridge_;
       sensor_msgs::CameraInfo cam_info_;
 
     // **** for visualisation in rviz

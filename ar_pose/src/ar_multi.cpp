@@ -153,9 +153,9 @@ namespace ar_pose
      * ARToolKit configure option (see config.h).*/
     try
     {
-      capture_ = bridge_.imgMsgToCv (image_msg, "bgr8");
+      *capture_ = cv_bridge::toCvCopy(image_msg, "bgr8")->image;
     }
-    catch (sensor_msgs::CvBridgeException & e)
+    catch (cv_bridge::Exception & e)
     {
       ROS_ERROR ("Could not convert from '%s' to 'bgr8'.", image_msg->encoding.c_str ());
     }
@@ -246,9 +246,9 @@ namespace ar_pose
 
       // **** publish transform between camera and marker
 
-      btQuaternion rotation (quat[0], quat[1], quat[2], quat[3]);
-      btVector3 origin (pos[0], pos[1], pos[2]);
-      btTransform t (rotation, origin);
+      tf::Quaternion rotation (quat[0], quat[1], quat[2], quat[3]);
+      tf::Vector3 origin (pos[0], pos[1], pos[2]);
+      tf::Transform t (rotation, origin);
 
       if (publishTf_)
       {
@@ -260,9 +260,9 @@ namespace ar_pose
 
       if (publishVisualMarkers_)
       {
-        btVector3 markerOrigin (0, 0, 0.25 * object[i].marker_width * AR_TO_ROS);
-        btTransform m (btQuaternion::getIdentity (), markerOrigin);
-        btTransform markerPose = t * m; // marker pose in the camera frame
+        tf::Vector3 markerOrigin (0, 0, 0.25 * object[i].marker_width * AR_TO_ROS);
+        tf::Transform m (tf::Quaternion::getIdentity (), markerOrigin);
+        tf::Transform markerPose = t * m; // marker pose in the camera frame
 
         tf::poseTFToMsg (markerPose, rvizMarker_.pose);
 
